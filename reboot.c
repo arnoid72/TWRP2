@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/reboot.h>
-#include <reboot/reboot.h>
 #include <unistd.h>
 
 #include "tw_reboot.h"

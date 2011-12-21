@@ -1,5 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
+recovery_additional_deps := teamwin fix_permissions.sh fs md5check.sh mke2fs.conf parted sdparted libmtdutils libbmlutils libmmcutils libflashutils
+
 #dummy file to trigger required modules
 include $(CLEAR_VARS)
 LOCAL_MODULE := teamwin

@@ -6,8 +6,6 @@ include $(CLEAR_VARS)
 
 commands_recovery_local_path := $(LOCAL_PATH)
 
-TARGET_RECOVERY_GUI := true
-
 LOCAL_MODULE := recovery
 
 LOCAL_C_INCLUDES += bionic external/stlport/stlport
@@ -74,9 +72,9 @@ LOCAL_STATIC_LIBRARIES :=
 LOCAL_SHARED_LIBRARIES :=
 
 LOCAL_STATIC_LIBRARIES += libminzip libunz libmincrypt libstlport_static 
-LOCAL_STATIC_LIBRARIES += libminui libpixelflinger_static libpng libjpeg
+LOCAL_STATIC_LIBRARIES += libminui libpixelflinger_static libpng
 
-LOCAL_SHARED_LIBRARIES += libz libmtdutils libc libcutils libstdc++
+LOCAL_SHARED_LIBRARIES += libjpeg libz libmtdutils libc libcutils libstdc++
 
 ifeq ($(TARGET_RECOVERY_UI_LIB),)
   LOCAL_SRC_FILES += default_recovery_ui.c
@@ -108,7 +106,9 @@ include $(BUILD_EXECUTABLE)
 
 include $(commands_recovery_local_path)/minui/Android.mk
 include $(commands_recovery_local_path)/minelf/Android.mk
+ifeq ($(TARGET_RECOVERY_GUI),true)
 include $(commands_recovery_local_path)/gui/Android.mk
+endif
 include $(commands_recovery_local_path)/minzip/Android.mk
 include $(commands_recovery_local_path)/mmcutils/Android.mk
 include $(commands_recovery_local_path)/mtdutils/Android.mk

@@ -54,3 +54,8 @@ void gui_notifyVarChange(const char *name, const char* value)
     return;
 }
 
+int gui_console_only(void)
+{
+    return -1;
+}
+
