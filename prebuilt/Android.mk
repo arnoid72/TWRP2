@@ -1,6 +1,6 @@
 LOCAL_PATH := $(call my-dir)
 
-recovery_additional_deps := teamwin fix_permissions.sh fs md5check.sh mke2fs.conf parted sdparted libmtdutils libbmlutils libmmcutils libflashutils
+RELINK := $(LOCAL_PATH)/relink.sh
 
 #dummy file to trigger required modules
 include $(CLEAR_VARS)
@@ -8,8 +8,40 @@ LOCAL_MODULE := teamwin
 LOCAL_MODULE_TAGS := eng
 LOCAL_MODULE_CLASS := RECOVERY_EXECUTABLES
 LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/sbin
-LOCAL_REQUIRED_MODULES := busybox e2fsck mke2fs tune2fs pigz libc libcutils libdl libext2_blkid libext2_com_err libext2_e2p libext2fs libext2_profile libext2_uuid liblog libm libstlport linker libstdc++
-LOCAL_SRC_FILES := teamwin
+
+# Manage list 
+RELINK_SOURCE_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/dump_image
+RELINK_SOURCE_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/flash_image
+RELINK_SOURCE_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/erase_image
+RELINK_SOURCE_FILES += $(TARGET_OUT_OPTIONAL_EXECUTABLES)/busybox
+RELINK_SOURCE_FILES += $(TARGET_OUT_OPTIONAL_EXECUTABLES)/pigz
+RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/e2fsck
+RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/mke2fs
+RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/tune2fs
+RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/linker
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libc.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libcutils.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libdl.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libext2_blkid.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libext2_com_err.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libext2_e2p.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libext2fs.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libext2_profile.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libext2_uuid.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/liblog.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libm.so
+RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libstdc++.so
+
+TWRP_AUTOGEN := $(intermediates)/teamwin
+
+GEN := $(intermediates)/teamwin
+$(GEN): $(RELINK)
+$(GEN): $(RELINK_SOURCE_FILES) $(call intermediates-dir-for,EXECUTABLES,recovery)/recovery
+	$(RELINK) $(TARGET_RECOVERY_ROOT_OUT)/sbin $(RELINK_SOURCE_FILES)
+	$(RELINK) $(call intermediates-dir-for,EXECUTABLES,recovery) $(call intermediates-dir-for,EXECUTABLES,recovery)/recovery
+
+LOCAL_GENERATED_SOURCES := $(GEN)
+LOCAL_SRC_FILES := teamwin $(GEN)
 include $(BUILD_PREBUILT)
 
 #fix_permissions

@@ -12,5 +12,6 @@ $(foreach board_define,$(BOARD_RECOVERY_DEFINES), \
 
 LOCAL_SRC_FILES := bmlutils.c
 LOCAL_MODULE := libbmlutils
+LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/sbin
 LOCAL_MODULE_TAGS := eng
 include $(BUILD_SHARED_LIBRARY)

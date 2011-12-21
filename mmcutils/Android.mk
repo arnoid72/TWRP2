@@ -13,6 +13,7 @@ mmcutils.c
 
 LOCAL_MODULE := libmmcutils
 LOCAL_MODULE_TAGS := eng
+LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/sbin
 
 include $(BUILD_SHARED_LIBRARY)
 

@@ -71,7 +71,7 @@ LOCAL_MODULE_TAGS := eng
 LOCAL_STATIC_LIBRARIES :=
 LOCAL_SHARED_LIBRARIES :=
 
-LOCAL_STATIC_LIBRARIES += libminzip libunz libmincrypt libstlport_static 
+LOCAL_STATIC_LIBRARIES += libminzip libunz libmincrypt libstlport_static
 LOCAL_STATIC_LIBRARIES += libminui libpixelflinger_static libpng
 
 LOCAL_SHARED_LIBRARIES += libjpeg libz libmtdutils libc libcutils libstdc++
