@@ -28,6 +28,9 @@
 		<resource name="sort_button" type="image" filename="qhd-sort-button" />
 		<resource name="minus_button" type="image" filename="qhd-minus-button" />
 		<resource name="plus_button" type="image" filename="qhd-plus-button" />
+        <resource name="slider" type="image" filename="slider" />
+        <resource name="slider-used" type="image" filename="slider-used" />
+        <resource name="slider-touch" type="image" filename="slider-touch" />
     </resources>
 	
 	<variables>
@@ -544,11 +547,9 @@
                 <text>Press back button to cancel.</text>
             </object>
 
-            <object type="button">
-                <placement x="%col_center_x%" y="550" />
-                <font resource="font" color="%button_text_color%" />
-                <text>Wipe cache!</text>
-                <image resource="main_button" />
+            <object type="slider">
+                <placement x="90" y="550" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
                 <action function="page">wipe_cache</action>
             </object>
 
