@@ -106,10 +106,24 @@
                 <color foreground="#A0A0A0" background="#303030" scroll="#303030" />
                 <font resource="fixed" />
             </object>
+            <object type="action">
+                <touch key="power" />
+                <action function="overlay">lock</action>
+            </object>
         </template>
     </templates>
 
     <pages>
+        <page name="lock">
+            <background color="#00000080" />
+
+            <object type="slider">
+                <placement x="90" y="800" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
+                <action function="overlay"></action>
+            </object>
+        </page>
+
         <page name="main">
             <object type="template" name="header" />
 
