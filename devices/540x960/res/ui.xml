@@ -114,16 +114,6 @@
     </templates>
 
     <pages>
-        <page name="lock">
-            <background color="#00000080" />
-
-            <object type="slider">
-                <placement x="90" y="800" />
-                <resource base="slider" used="slider-used" touch="slider-touch" />
-                <action function="overlay"></action>
-            </object>
-        </page>
-
         <page name="main">
             <object type="template" name="header" />
 
@@ -562,7 +552,7 @@
             </object>
 
             <object type="slider">
-                <placement x="90" y="550" />
+                <placement x="0" y="575" />
                 <resource base="slider" used="slider-used" touch="slider-touch" />
                 <action function="page">wipe_cache</action>
             </object>
@@ -623,11 +613,9 @@
                 <text>Press back button to cancel.</text>
             </object>
 
-            <object type="button">
-                <placement x="%col_center_x%" y="550" />
-                <font resource="font" color="%button_text_color%" />
-                <text>Wipe dalvik!</text>
-                <image resource="main_button" />
+            <object type="slider">
+                <placement x="0" y="575" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
                 <action function="page">wipe_dalvik</action>
             </object>
 
@@ -687,11 +675,9 @@
                 <text>Press back button to cancel.</text>
             </object>
 
-            <object type="button">
-                <placement x="%col_center_x%" y="550" />
-                <font resource="font" color="%button_text_color%" />
-                <text>Wipe rotate!</text>
-                <image resource="main_button" />
+            <object type="slider">
+                <placement x="0" y="575" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
                 <action function="page">wipe_rotate</action>
             </object>
 
@@ -751,11 +737,9 @@
                 <text>Press back button to cancel.</text>
             </object>
 
-            <object type="button">
-                <placement x="%col_center_x%" y="550" />
-                <font resource="font" color="%button_text_color%" />
-                <text>Wipe data!</text>
-                <image resource="main_button" />
+            <object type="slider">
+                <placement x="0" y="575" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
                 <action function="page">wipe_data</action>
             </object>
 
@@ -815,11 +799,9 @@
                 <text>Press back button to cancel.</text>
             </object>
 
-            <object type="button">
-                <placement x="%col_center_x%" y="550" />
-                <font resource="font" color="%button_text_color%" />
-                <text>Wipe system!</text>
-                <image resource="main_button" />
+            <object type="slider">
+                <placement x="0" y="575" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
                 <action function="page">wipe_system</action>
             </object>
 
@@ -879,11 +861,9 @@
                 <text>Press back button to cancel.</text>
             </object>
 
-            <object type="button">
-                <placement x="%col_center_x%" y="550" />
-                <font resource="font" color="%button_text_color%" />
-                <text>Wipe sdcard!</text>
-                <image resource="main_button" />
+            <object type="slider">
+                <placement x="0" y="575" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
                 <action function="page">wipe_sdcard</action>
             </object>
 
@@ -946,11 +926,9 @@
                 <text>Press back button to cancel.</text>
             </object>
 
-            <object type="button">
-                <placement x="%col_center_x%" y="550" />
-                <font resource="font" color="%button_text_color%" />
-                <text>Wipe sd-ext!</text>
-                <image resource="main_button" />
+            <object type="slider">
+                <placement x="0" y="575" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
                 <action function="page">wipe_sdext</action>
             </object>
 
@@ -1010,11 +988,9 @@
                 <text>Press back button to cancel.</text>
             </object>
 
-            <object type="button">
-                <placement x="%col_center_x%" y="550" />
-                <font resource="font" color="%button_text_color%" />
-                <text>Wipe battery!</text>
-                <image resource="main_button" />
+            <object type="slider">
+                <placement x="0" y="575" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
                 <action function="page">wipe_battery</action>
             </object>
 
@@ -2651,6 +2627,16 @@
             </object>
                         
             <object type="template" name="footer" />
+        </page>
+
+        <page name="lock">
+            <background color="#00000080" />
+
+            <object type="slider">
+                <placement x="0" y="800" />
+                <resource base="slider" used="slider-used" touch="slider-touch" />
+                <action function="overlay"></action>
+            </object>
         </page>
     </pages>
 </recovery>
