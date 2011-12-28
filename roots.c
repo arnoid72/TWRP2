@@ -123,10 +123,10 @@ Volume* volume_for_device(const char* device)
     return NULL;
 }
 
-int ensure_path_mounted(const char* path) {
-#ifdef RECOVERY_SDCARD_ON_DATA
-    if (strcmp(path, "/sdcard") == 0)   return 0;
-#endif
+int ensure_path_mounted(const char* path)
+{
+    // For sdcard, we're going to use tw_mount
+    if (strcmp(path, "/sdcard") == 0)       return tw_mount(sdcext);
 
     Volume* v = volume_for_path(path);
     if (v == NULL) {

@@ -181,7 +181,9 @@ static int get_bootloader_message_block(struct bootloader_message *out,
 }
 
 static int set_bootloader_message_block(const struct bootloader_message *in,
-                                        const Volume* v) {
+                                        const Volume* v)
+{
+#if 0
     wait_for_device(v->device);
     FILE* f = fopen(v->device, "wb");
     if (f == NULL) {
@@ -197,5 +199,6 @@ static int set_bootloader_message_block(const struct bootloader_message *in,
         LOGE("Failed closing %s\n(%s)\n", v->device, strerror(errno));
         return -1;
     }
+#endif
     return 0;
 }

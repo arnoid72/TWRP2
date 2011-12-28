@@ -1854,7 +1854,7 @@ void all_settings_menu(int pIdx)
 */
 int check_md5(char* path) {
     char cmd[PATH_MAX + 30];
-    sprintf(cmd, "/sbin/md5check.sh '%s'", path);
+    sprintf(cmd, "/sbin/md5check.sh \"%s\"", path);
     
     //ui_print("\nMD5 Command: %s", cmd);
     

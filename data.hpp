@@ -19,12 +19,22 @@
 
 #include <string>
 #include <utility>
+#include <vector>
 #include <map>
 
 using namespace std;
 
 class DataManager
 {
+public:
+    typedef pair<string, int> TStrIntPair;
+    typedef pair<string, TStrIntPair> TNameValuePair;
+    typedef vector<string> TStrArr;
+    typedef map<string, TStrIntPair> TValueMap;
+    typedef map<string, TStrArr> TArrayMap;
+    typedef map<string, string> TStrMap;
+    typedef pair<string, TStrArr> TNameArrayPair;
+
 public:
     static int ResetDefaults();
     static int LoadValues(const string filename);
@@ -48,14 +58,16 @@ public:
 
     static void DumpValues();
 
+    static int PushArray(const string varName, string value);
+    static int PopArray(const string varName, string& value);
+
 protected:
-    typedef pair<string, int> TStrIntPair;
-    typedef pair<string, TStrIntPair> TNameValuePair;
-    static map<string, TStrIntPair> mValues;
+    static TValueMap mValues;
+    static TArrayMap mArrays;
+    static TStrMap mConstValues;
     static string mBackingFile;
     static int mInitialized;
 
-    static map<string, string> mConstValues;
 
 protected:
     static int SaveValues();

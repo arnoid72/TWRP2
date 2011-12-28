@@ -57,10 +57,11 @@ extern "C"
 
 using namespace std;
 
-map<string, DataManager::TStrIntPair>   DataManager::mValues;
-map<string, string>                     DataManager::mConstValues;
-string                                  DataManager::mBackingFile;
-int                                     DataManager::mInitialized = 0;
+DataManager::TValueMap  DataManager::mValues;
+DataManager::TArrayMap  DataManager::mArrays;
+DataManager::TStrMap    DataManager::mConstValues;
+string                  DataManager::mBackingFile;
+int                     DataManager::mInitialized = 0;
 
 int DataManager::ResetDefaults()
 {
@@ -103,7 +104,7 @@ int DataManager::LoadValues(const string filename)
         if (fread(array, 1, length, in) != length)                                      goto error;
         Value = array;
 
-        map<string, TStrIntPair>::iterator pos;
+        TValueMap::iterator pos;
 
         pos = mValues.find(Name);
         if (pos != mValues.end())
@@ -138,7 +139,7 @@ int DataManager::SaveValues()
     int file_version = FILE_VERSION;
     fwrite(&file_version, 1, sizeof(int), out);
 
-    map<string, TStrIntPair>::iterator iter;
+    TValueMap::iterator iter;
     for (iter = mValues.begin(); iter != mValues.end(); ++iter)
     {
         // Save only the persisted data
@@ -173,7 +174,7 @@ int DataManager::GetValue(const string varName, string& value)
     // Handle magic values
     if (GetMagicValue(localStr, value) == 0)     return 0;
 
-    map<string, string>::iterator constPos;
+    TStrMap::iterator constPos;
     constPos = mConstValues.find(localStr);
     if (constPos != mConstValues.end())
     {
@@ -181,7 +182,7 @@ int DataManager::GetValue(const string varName, string& value)
         return 0;
     }
 
-    map<string, TStrIntPair>::iterator pos;
+    TValueMap::iterator pos;
     pos = mValues.find(localStr);
     if (pos == mValues.end())
         return -1;
@@ -207,12 +208,12 @@ string& DataManager::GetValueRef(const string varName)
     if (!mInitialized)
         SetDefaultValues();
 
-    map<string, string>::iterator constPos;
+    TStrMap::iterator constPos;
     constPos = mConstValues.find(varName);
     if (constPos != mConstValues.end())
         return constPos->second;
 
-    map<string, TStrIntPair>::iterator pos;
+    TValueMap::iterator pos;
     pos = mValues.find(varName);
     if (pos == mValues.end())
         pos = (mValues.insert(TNameValuePair(varName, TStrIntPair("", 0)))).first;
@@ -248,12 +249,12 @@ int DataManager::SetValue(const string varName, string value, int persist /* = 0
     if (varName.empty() || (varName[0] >= '0' && varName[0] <= '9'))
         return -1;
 
-    map<string, string>::iterator constChk;
+    TStrMap::iterator constChk;
     constChk = mConstValues.find(varName);
     if (constChk != mConstValues.end())
         return -1;
 
-    map<string, TStrIntPair>::iterator pos;
+    TValueMap::iterator pos;
     pos = mValues.find(varName);
     if (pos == mValues.end())
         pos = (mValues.insert(TNameValuePair(varName, TStrIntPair(value, persist)))).first;
@@ -283,7 +284,7 @@ int DataManager::SetValue(const string varName, float value, int persist /* = 0 
 
 void DataManager::DumpValues()
 {
-    map<string, TStrIntPair>::iterator iter;
+    TValueMap::iterator iter;
     ui_print("Data Manager dump - Values with leading X are persisted.\n");
     for (iter = mValues.begin(); iter != mValues.end(); ++iter)
     {
@@ -391,6 +392,67 @@ int DataManager::GetMagicValue(const string varName, string& value)
         return 0;
     }
     return -1;
+}
+
+int DataManager::PushArray(const string varName, string value)
+{
+    // Don't allow empty values or numerical starting values
+    if (varName.empty() || (varName[0] >= '0' && varName[0] <= '9'))
+        return -1;
+
+    // Strip off leading and trailing '%' if provided
+    string localStr = varName;
+    if (localStr.length() > 2 && localStr[0] == '%' && localStr[localStr.length()-1] == '%')
+    {
+        localStr.erase(0, 1);
+        localStr.erase(localStr.length() - 1, 1);
+    }
+
+    // Make sure we don't already have a variable of this name
+    string tmp;
+    if (GetValue(varName, tmp) >= 0)
+        return -1;
+
+    TArrayMap::iterator pos;
+    pos = mArrays.find(localStr);
+    if (pos == mArrays.end())
+    {
+        TStrArr strArray;
+        strArray.push_back(value);
+        mArrays.insert(TNameArrayPair(varName, strArray));
+    }
+    else
+    {
+        pos->second.push_back(value);
+    }
+
+    gui_notifyVarChange(varName.c_str(), value.c_str());
+    return 0;
+}
+
+int DataManager::PopArray(const string varName, string& value)
+{
+    string localStr = varName;
+
+    // Strip off leading and trailing '%' if provided
+    if (localStr.length() > 2 && localStr[0] == '%' && localStr[localStr.length()-1] == '%')
+    {
+        localStr.erase(0, 1);
+        localStr.erase(localStr.length() - 1, 1);
+    }
+
+    TArrayMap::iterator pos;
+    pos = mArrays.find(localStr);
+    if (pos == mArrays.end())
+        return -1;
+
+    if (pos->second.size() == 0)
+        return -1;
+
+    value = pos->second.back();
+    pos->second.pop_back();
+
+    return 0;
 }
 
 extern "C" int DataManager_ResetDefaults()
