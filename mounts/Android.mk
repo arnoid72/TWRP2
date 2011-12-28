@@ -1,0 +1,37 @@
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := libmounts
+
+LOCAL_SRC_FILES := \
+    mounts.cpp \
+	emmc.cpp \
+	fstab.cpp \
+	generic.cpp \
+	folder.cpp \
+	utility.cpp
+
+LOCAL_C_INCLUDES += bionic external/stlport/stlport $(intermediates)
+
+ifneq ($(SP1_NAME),)
+	LOCAL_CFLAGS += -DSP1_NAME=$(SP1_NAME) -DSP1_BACKUP_METHOD=$(SP1_BACKUP_METHOD) -DSP1_MOUNTABLE=$(SP1_MOUNTABLE)
+endif
+ifneq ($(SP1_DISPLAY_NAME),)
+	LOCAL_CFLAGS += -DSP1_DISPLAY_NAME=$(SP1_DISPLAY_NAME)
+endif
+ifneq ($(SP2_NAME),)
+	LOCAL_CFLAGS += -DSP2_NAME=$(SP2_NAME) -DSP2_BACKUP_METHOD=$(SP2_BACKUP_METHOD) -DSP2_MOUNTABLE=$(SP2_MOUNTABLE)
+endif
+ifneq ($(SP2_DISPLAY_NAME),)
+	LOCAL_CFLAGS += -DSP2_DISPLAY_NAME=$(SP2_DISPLAY_NAME)
+endif
+ifneq ($(SP3_NAME),)
+	LOCAL_CFLAGS += -DSP3_NAME=$(SP3_NAME) -DSP3_BACKUP_METHOD=$(SP3_BACKUP_METHOD) -DSP3_MOUNTABLE=$(SP3_MOUNTABLE)
+endif
+ifneq ($(SP3_DISPLAY_NAME),)
+	LOCAL_CFLAGS += -DSP3_DISPLAY_NAME=$(SP3_DISPLAY_NAME)
+endif
+
+include $(BUILD_STATIC_LIBRARY)
+
