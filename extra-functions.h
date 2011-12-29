@@ -1,3 +1,5 @@
+// No header
+
 int __system(const char *command);
 FILE * __popen(const char *program, const char *type);
 int __pclose(FILE *iop);
@@ -56,14 +58,7 @@ int menu_loc[255];
 void inc_menu_loc(int bInt);
 void dec_menu_loc();
 
-char* isMounted(int mInt);
 void mount_menu(int pIdx);
-void chkMounts();
-int sysIsMounted;
-int datIsMounted;
-int cacIsMounted;
-int sdcIsMounted;
-int sdeIsMounted;
 char multi_zip_array[10][255];
 int multi_zip_index;
 

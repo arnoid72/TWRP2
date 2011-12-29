@@ -37,21 +37,16 @@
 #include <sstream>
 
 #include "data.hpp"
+#include "common.h"
+#include "tw_reboot.h"
 
-extern "C"
-{
-    #include "common.h"
-    #include "data.h"
-	#include "ddftw.h"
-    #include "tw_reboot.h"
+int get_battery_level(void);
+void get_device_id(void);
 
-    int get_battery_level(void);
-    void get_device_id(void);
+extern char device_id[15];
 
-    extern char device_id[15];
+void gui_notifyVarChange(const char *name, const char* value);
 
-    void gui_notifyVarChange(const char *name, const char* value);
-}
 
 #define FILE_VERSION    0x00010001
 
@@ -237,6 +232,17 @@ int DataManager::GetIntValue(const string varName)
 
     GetValue(varName, retVal);
     return atoi(retVal.c_str());
+}
+
+// This function will return 1 if the value doesn't exist
+int DataManager::ToggleIntValue(const string varName)
+{
+    string retVal;
+
+    GetValue(varName, retVal);
+    if (varName.empty() || varName == "0")      SetValue(varName, "1");
+    else                                        SetValue(varName, "0");
+    return GetIntValue(varName);
 }
 
 
@@ -453,71 +459,5 @@ int DataManager::PopArray(const string varName, string& value)
     pos->second.pop_back();
 
     return 0;
-}
-
-extern "C" int DataManager_ResetDefaults()
-{
-    return DataManager::ResetDefaults();
-}
-
-
-extern "C" int DataManager_LoadValues(const char* filename)
-{
-    return DataManager::LoadValues(filename);
-}
-
-extern "C" int DataManager_Flush()
-{
-    return DataManager::Flush();
-}
-
-extern "C" int DataManager_GetValue(const char* varName, char* value)
-{
-    int ret;
-    string str;
-
-    ret = DataManager::GetValue(varName, str);
-    if (ret == 0)
-        strcpy(value, str.c_str());
-    return ret;
-}
-
-extern "C" const char* DataManager_GetStrValue(const char* varName)
-{
-    string& str = DataManager::GetValueRef(varName);
-    return str.c_str();
-}
-
-extern "C" int DataManager_GetIntValue(const char* varName)
-{
-    return DataManager::GetIntValue(varName);
-}
-
-extern "C" int DataManager_SetStrValue(const char* varName, char* value)
-{
-    return DataManager::SetValue(varName, value, 0);
-}
-
-extern "C" int DataManager_SetIntValue(const char* varName, int value)
-{
-    return DataManager::SetValue(varName, value, 0);
-}
-
-extern "C" int DataManager_SetFloatValue(const char* varName, float value)
-{
-    return DataManager::SetValue(varName, value, 0);
-}
-
-extern "C" int DataManager_ToggleIntValue(const char* varName)
-{
-    if (DataManager::GetIntValue(varName))
-        return DataManager::SetValue(varName, 0);
-    else
-        return DataManager::SetValue(varName, 1);
-}
-
-extern "C" void DataManager_DumpValues()
-{
-    return DataManager::DumpValues();
 }
 
