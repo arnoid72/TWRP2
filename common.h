@@ -145,6 +145,8 @@ typedef struct {
 
 } UIParameters;
 
+
+
 // This handles the special partitions
 #ifndef SP1_NAME
 #define SP1_NAME

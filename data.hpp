@@ -50,7 +50,6 @@ public:
     // Helper functions
     static string GetStrValue(const string varName);
     static int GetIntValue(const string varName);
-    static int ToggleIntValue(const string varName);
 
     // Core set routines
     static int SetValue(const string varName, string value, int persist = 0);

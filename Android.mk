@@ -11,17 +11,18 @@ LOCAL_MODULE := recovery
 LOCAL_C_INCLUDES += bionic external/stlport/stlport
 
 LOCAL_SRC_FILES := \
-    recovery.cpp \
-    bootloader.cpp \
-    install.cpp \
-    roots.cpp \
-    ui.cpp \
-    verifier.cpp \
-    encryptedfs_provisioning.cpp \
-    extra-functions.cpp \
-    backstore.cpp \
-    themes.cpp \
-    format.cpp \
+    recovery.c \
+    bootloader.c \
+    install.c \
+    roots.c \
+    ui.c \
+    verifier.c \
+    encryptedfs_provisioning.c \
+    extra-functions.c \
+    ddftw.c \
+    backstore.c \
+    themes.c \
+    format.c \
     data.cpp
 
 ifeq ($(TARGET_RECOVERY_REBOOT_SRC),)
@@ -32,6 +33,32 @@ endif
 
 RECOVERY_API_VERSION := 2
 LOCAL_CFLAGS += -DRECOVERY_API_VERSION=$(RECOVERY_API_VERSION)
+
+ifeq ($(BOARD_HAS_NO_REAL_SDCARD), true)
+    LOCAL_CFLAGS += -DBOARD_HAS_NO_REAL_SDCARD
+endif
+
+ifneq ($(SP1_NAME),)
+	LOCAL_CFLAGS += -DSP1_NAME=$(SP1_NAME) -DSP1_BACKUP_METHOD=$(SP1_BACKUP_METHOD) -DSP1_MOUNTABLE=$(SP1_MOUNTABLE)
+endif
+ifneq ($(SP1_DISPLAY_NAME),)
+	LOCAL_CFLAGS += -DSP1_DISPLAY_NAME=$(SP1_DISPLAY_NAME)
+endif
+ifneq ($(SP2_NAME),)
+	LOCAL_CFLAGS += -DSP2_NAME=$(SP2_NAME) -DSP2_BACKUP_METHOD=$(SP2_BACKUP_METHOD) -DSP2_MOUNTABLE=$(SP2_MOUNTABLE)
+endif
+ifneq ($(SP2_DISPLAY_NAME),)
+	LOCAL_CFLAGS += -DSP2_DISPLAY_NAME=$(SP2_DISPLAY_NAME)
+endif
+ifneq ($(SP3_NAME),)
+	LOCAL_CFLAGS += -DSP3_NAME=$(SP3_NAME) -DSP3_BACKUP_METHOD=$(SP3_BACKUP_METHOD) -DSP3_MOUNTABLE=$(SP3_MOUNTABLE)
+endif
+ifneq ($(SP3_DISPLAY_NAME),)
+	LOCAL_CFLAGS += -DSP3_DISPLAY_NAME=$(SP3_DISPLAY_NAME)
+endif
+ifneq ($(RECOVERY_SDCARD_ON_DATA),)
+	LOCAL_CFLAGS += -DRECOVERY_SDCARD_ON_DATA
+endif
 
 
 # This binary is in the recovery ramdisk, which is otherwise a copy of root.
@@ -44,7 +71,7 @@ LOCAL_MODULE_TAGS := eng
 LOCAL_STATIC_LIBRARIES :=
 LOCAL_SHARED_LIBRARIES :=
 
-LOCAL_STATIC_LIBRARIES += libmounts libminzip libunz libmincrypt libstlport_static
+LOCAL_STATIC_LIBRARIES += libminzip libunz libmincrypt libstlport_static
 LOCAL_STATIC_LIBRARIES += libminui libpixelflinger_static libpng
 
 LOCAL_SHARED_LIBRARIES += libjpeg libz libmtdutils libc libcutils libstdc++
@@ -77,8 +104,6 @@ LOCAL_STATIC_LIBRARIES := libmincrypt libcutils libstdc++ libc
 
 include $(BUILD_EXECUTABLE)
 
-include $(commands_recovery_local_path)/tw_busybox/Android.mk
-include $(commands_recovery_local_path)/mounts/Android.mk
 include $(commands_recovery_local_path)/minui/Android.mk
 include $(commands_recovery_local_path)/minelf/Android.mk
 ifeq ($(TARGET_RECOVERY_GUI),true)
